@@ -1,8 +1,5 @@
 # GREASE
-
-###### [Our Trello Board for Feature Tracking](https://trello.com/b/c1jXxBvA/grease)
-
-###### Automation as a Service
+###### Event Driven Python Execution Engine
 
 [![Travis](https://img.shields.io/travis/rust-lang/rust.svg)](https://travis-ci.org/target/grease)
 [![AppVeyor](https://img.shields.io/appveyor/ci/lemoney/grease.svg)](https://ci.appveyor.com/project/lemoney/grease)
@@ -21,26 +18,12 @@
   
 ## What it does
 
-GREASE is designed as a system to enable generalized and large scale 
-automation efforts. Rather than approaching automation via manual 
-scripts, scheduled runs in a task runner system, GREASE is designed 
-to be completely hands free. This _enables true and actual 
-automation and reduction of toil_. GREASE is designed to stop the 
-decades old mentality of operations and operators from 
-break/fix work, and redirect their efforts to the principles
-of SRE. A common simile for GREASE is: "Let Operations 
-**STOP** fighting all these fires (automated preventable incidents), 
-install the sprinkler system (GREASE) and begin performing arson 
-investigation (helping solutions portfolio working on & prioritizing
-their backlog/Designing better processes and infrastructure)
-
-GREASE provides a simple JSON configuration schema for
-issue detection and a safe Python command class for 
-implementing resolutions. 
+GREASE is a system to enable automation via configuration for events
+and executing related commands (via a regular python class)
 
 ## How it works
 
-GREASE runs 24/7/365 monitoring sources you define and 
+GREASE runs 24/7/365 monitoring events you define and 
 based on configuration can act on these sources. These actions
 can be anything you can do in python.
 
@@ -52,19 +35,10 @@ to Django, you write your application, GREASE just serves it.
   1. Install sphinx `pip install sphinx`
   2. generate the docs by running `make html`
   3. Use a web browser to read the docs starting at `<project root>/docs/_build/index.html`
-
-## Requirements
-  1. Python2.7
-  2. Pip
-     * requests
-     * pymongo
-     * psutil
-     * psycopg2
-     * elasticsearch
-     * psutil
-     * **FOR WINDOWS ONLY** pypiwin32
      
 ## Installing
+
+Python 3.7+ required!
   
 ### Via PIP
 

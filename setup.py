@@ -1,20 +1,26 @@
 from setuptools import setup, find_packages
 import os
 
+VERSION = '3.0.0'
+AUTHOR = 'James E. Bell Jr.'
+CONTACT = 'james.e.bell@target.com'
+
+
+def readme():
+    with open('readme.md') as f:
+        return f.read()
+
 
 setup(
     name='tgt_grease',
-    version='2.3.5',
+    version=VERSION,
+    author=AUTHOR,
+    author_email=CONTACT,
     license="MIT",
     description='Modern distributed automation engine built with love by Target',
-    long_description="""
-    GREASE is a general purpose distributed automation engine designed to scale to enterprise workloads. We utilize
-    MongoDB and a plugin architecture to enable broad automation possibilities via one common core of primitives and 
-    services. 
-    """,
+    long_description=readme(),
     classifiers=[
         'Development Status :: 5 - Production/Stable',
-        'Programming Language :: Python :: 2',
         'Programming Language :: Python :: 3',
         'Intended Audience :: System Administrators',
         'Intended Audience :: Information Technology',
@@ -28,18 +34,11 @@ setup(
         'Operating System :: POSIX'
     ],
     keywords='python automated recovery',
-    author='James E. Bell Jr.',
-    author_email="james.e.bell@target.com",
     packages=find_packages(),
     test_suite='nose.collector',
-    tests_require=['nose', 'nose-cover3', 'mock'],
+    setup_requires=['pytest-runner'],
+    tests_require=['pytest'],
     install_requires=[
-        'psycopg2-binary',
-        'requests',
-        'pymongo',
-        'psutil',
-        'elasticsearch',
-        'kafka'
     ] + (
          ["pywin32"] if "nt" == os.name else []
         ),
