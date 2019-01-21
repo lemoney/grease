@@ -3,7 +3,7 @@ from .base_class import CLASS
 from abc import abstractmethod, ABCMeta
 
 
-class Command(CLASS):
+class Prototype(CLASS):
     """abstract base for grease commands"""
 
     __metadata__ = ABCMeta
