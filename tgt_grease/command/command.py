@@ -33,4 +33,3 @@ class Command(CLASS):
             context (dict): command context object
 
         """
-        pass

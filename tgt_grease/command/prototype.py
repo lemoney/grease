@@ -44,4 +44,3 @@ class Command(CLASS):
     @abstractmethod
     def run(self, context: dict):
         """user defined prototype to execute"""
-        pass

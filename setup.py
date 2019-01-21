@@ -37,7 +37,7 @@ setup(
     packages=find_packages(),
     test_suite='nose.collector',
     setup_requires=['pytest-runner'],
-    tests_require=['pytest'],
+    tests_require=['pytest', 'pylint'],
     install_requires=[
     ] + (
          ["pywin32"] if "nt" == os.name else []

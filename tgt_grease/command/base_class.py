@@ -15,9 +15,9 @@ class CLASS:
         self.log = logging.getLogger("grease")
 
     @property
-    def log(self) -> logging.Logger:
+    def log(self) -> logging.Logger:  # pylint: disable=C0111
         return self.__log
 
     @log.setter
-    def log(self, l: logging.Logger):
+    def log(self, l: logging.Logger):  # pylint: disable=C0111
         self.__log = l
