@@ -1,5 +1,7 @@
 """base class for all classes to implement in grease"""
 import logging
+from logging.config import fileConfig
+import pkg_resources
 
 
 class CLASS:
@@ -12,6 +14,7 @@ class CLASS:
     __log: logging.Logger
 
     def __init__(self):
+        fileConfig(pkg_resources.resource_filename("tgt_grease", "logging.conf"))
         self.log = logging.getLogger("grease")
 
     @property
@@ -21,3 +24,15 @@ class CLASS:
     @log.setter
     def log(self, l: logging.Logger):  # pylint: disable=C0111
         self.__log = l
+
+    def set_logger_name(self, name: str):
+        """set the logger name
+
+        Args:
+            name (str): name of the logger underneath `grease`
+
+        Note:
+            this will set the logger to grease.`name`
+
+        """
+        self.log = logging.getLogger(f"{self.log.name}.{name}")

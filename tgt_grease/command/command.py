@@ -1,6 +1,5 @@
 """definition of the core command class"""
 from .base_class import CLASS
-import logging
 from abc import abstractmethod, ABCMeta
 
 
@@ -11,7 +10,7 @@ class Command(CLASS):
 
     def __init__(self):
         super().__init__()
-        self.log = logging.getLogger("grease.command")
+        self.set_logger_name("command")
 
     def safe_execute(self, context: dict):
         """safely execute command to ensure thread doesn't crash
