@@ -1,3 +1,3 @@
 """main package"""
-from . import command
+from . import types
 from .runtime import Runtime

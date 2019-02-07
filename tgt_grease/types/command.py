@@ -1,4 +1,4 @@
-"""definition of the core command class"""
+"""definition of the core types class"""
 from .base_class import CLASS
 from abc import abstractmethod, ABCMeta
 
@@ -10,25 +10,25 @@ class Command(CLASS):
 
     def __init__(self):
         super().__init__()
-        self.set_logger_name("command")
+        self.set_logger_name("types")
 
     def safe_execute(self, context: dict):
-        """safely execute command to ensure thread doesn't crash
+        """safely execute types to ensure thread doesn't crash
 
         Args:
-            context (dict): command context
+            context (dict): types context
 
         """
         try:
             self.execute(context)
         except BaseException as e:
-            self.log.critical(f"failed to execute command due to {type(e)}")
+            self.log.critical(f"failed to execute types due to {type(e)}")
 
     @abstractmethod
     def execute(self, context: dict):
-        """command execution (user main method effectively)
+        """types execution (user main method effectively)
 
         Args:
-            context (dict): command context object
+            context (dict): types context object
 
         """

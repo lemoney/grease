@@ -1,4 +1,4 @@
-"""definition of the core command class"""
+"""definition of the core types class"""
 from .base_class import CLASS
 from abc import abstractmethod, ABCMeta
 
@@ -16,19 +16,19 @@ class Prototype(CLASS):
         """safely execute prototype to ensure thread doesn't crash
 
         Args:
-            context (dict): command context
+            context (dict): types context
 
         """
         try:
             self.execute(context)
         except BaseException as e:
-            self.log.critical(f"failed to execute command due to {type(e)}")
+            self.log.critical(f"failed to execute types due to {type(e)}")
 
     def execute(self, context: dict):
-        """command prototype (user main method effectively)
+        """types prototype (user main method effectively)
 
         Args:
-            context (dict): command context object
+            context (dict): types context object
 
         """
         if int(context.get("loop", "0")) == 0:

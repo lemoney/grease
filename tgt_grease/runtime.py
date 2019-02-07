@@ -1,5 +1,5 @@
 """GREASE Runtime Definition"""
-from .command import CLASS
+from .types import CLASS
 
 
 class Runtime(CLASS):
