@@ -1,16 +1,16 @@
 """GREASE Runtime Definition"""
 from .types import CLASS
 from .configuration import Configuration
-from typing import Dict, List
+from typing import Dict, List, Union
 
 
 class Runtime(CLASS):
     """responsible for running the E in GREASE (the engine)"""
 
     __config: Configuration
-    __context: Dict[str, any]
+    __context: Dict[str, Union[str, List[str]]]
 
-    def __init__(self, conf: Configuration, context: Dict[str, any]):
+    def __init__(self, conf: Configuration, context: Dict[str, Union[str, List[str]]]):
         super(Runtime, self).__init__()
         self.__config = conf
         self.__context = context
@@ -38,7 +38,7 @@ class Runtime(CLASS):
         self.__context = ctx
 
     @staticmethod
-    def parse_data_args(data: List[str], sep: str) -> Dict[str, any]:
+    def parse_data_args(data: List[str], sep: str) -> Dict[str, Union[str, List[str]]]:
         """This is useful for transforming a list of key/values into a dictionary
         EX::
             ["key1=val1", "key2=val2", "key3=val3"] -> {'key1': 'val1', 'key2': 'val2', 'key3': 'val3'}
