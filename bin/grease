@@ -1,2 +1,25 @@
 #! /usr/bin/env python
-print("DO THIS")
+import argparse
+import logging
+from logging import config
+import os
+import sys
+
+log = logging.getLogger("grease.cli")
+parser = argparse.ArgumentParser()
+parser.add_argument('--log-config', help='load a logging configuration file', type=str)
+parser.add_argument('--context', '-c', nargs='+', help='key=value pairs for context', default='')
+args = parser.parse_args()
+
+if args.log_config:
+    try:
+        if os.stat(args.log_config):
+            config.fileConfig(args.log_config)
+        else:
+            log.critical(f'invalid logging configuration [{args.log_config}]')
+            parser.print_help()
+            sys.exit(1)
+    except FileNotFoundError:
+        log.critical(f'logging configuration [{args.log_config}] not found')
+        parser.print_help()
+        sys.exit(1)

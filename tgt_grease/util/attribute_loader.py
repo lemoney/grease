@@ -13,7 +13,7 @@ class AttributeLoader(CLASS):
     """
 
     __config: Configuration
-    
+
     def __init__(self, config: Configuration):
         super(AttributeLoader, self).__init__()
         self.__config = config
@@ -62,7 +62,7 @@ class AttributeLoader(CLASS):
         Args:
             obj (Any object): Object you are searching for a named attribute for
             name (str): Name of the attribute you want to get from object
-            default (Any object): Return value if attribute name is not found in object. Raises exception if no default is provided.
+            default (Any object): Return value if attr name is not found in object. exception if no default is provided
         Returns:
             object: If an attribute is found it is returned. If it is not found, default is returned.
         """
@@ -80,11 +80,11 @@ class AttributeLoader(CLASS):
         return cont_name in dir(module)
 
     @property
-    def config(self) -> Configuration:
+    def config(self) -> Configuration:  # pylint: disable=C0111
         return self.__config
 
     @config.setter
-    def config(self, c: Configuration):
+    def config(self, c: Configuration):  # pylint: disable=C0111
         if not isinstance(c, Configuration):
             raise AttributeError("`config` must be of type tgt_grease.Configuration")
         self.__config = c
