@@ -17,6 +17,21 @@ class Runtime(CLASS):
         self.set_logger_name("runtime")
         self.log.debug("runtime startup")
 
+    def execute(self, cmd: str):
+        """execute the command from the CLI
+
+        Args:
+            cmd (str): command to execute
+
+        Returns:
+            None: should execute cleanly
+
+        Raises:
+            RuntimeError: if the command throws an exception or fails execution
+
+        """
+        raise RuntimeError("not implemented")
+
     @property
     def config(self) -> Configuration:  # pylint: disable=C0111
         return self.__config

@@ -4,11 +4,16 @@ import logging
 from logging import config
 import os
 import sys
+import json
+from dataclasses import replace
+from tgt_grease import Runtime, Configuration
 
 log = logging.getLogger("grease.cli")
 parser = argparse.ArgumentParser()
 parser.add_argument('--log-config', help='load a logging configuration file', type=str)
+parser.add_argument('--config', help='load a configuration file for this node', type=str)
 parser.add_argument('--context', '-c', nargs='+', help='key=value pairs for context', default='')
+parser.add_argument('command', metavar='command', type=str, help='command to execute')
 args = parser.parse_args()
 
 if args.log_config:
@@ -23,3 +28,23 @@ if args.log_config:
         log.critical(f'logging configuration [{args.log_config}] not found')
         parser.print_help()
         sys.exit(1)
+
+nodeConfig = Configuration()
+if args.config:
+    try:
+        if os.stat(args.config):
+            with open(args.config) as fil:
+                updates = json.load(fil)
+                nodeConfig = replace(nodeConfig, **updates)
+        else:
+            log.critical(f'invalid configuration [{args.config}]')
+            parser.print_help()
+            sys.exit(1)
+    except FileNotFoundError:
+        log.critical(f'logging configuration [{args.config}] not found')
+        parser.print_help()
+        sys.exit(1)
+
+ctx = Runtime.parse_data_args(args.context, ",")
+
+Runtime(nodeConfig, ctx).execute(args.command)
