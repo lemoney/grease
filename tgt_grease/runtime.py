@@ -1,5 +1,5 @@
 """GREASE Runtime Definition"""
-from .types import CLASS, Command
+from .types import CLASS, Command  # pylint: disable=W0611
 from .util import AttributeLoader
 from .configuration import Configuration
 from typing import Dict, List, Union
