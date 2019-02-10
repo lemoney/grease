@@ -1,5 +1,6 @@
 """GREASE Runtime Definition"""
-from .types import CLASS
+from .types import CLASS, Command
+from .util import AttributeLoader
 from .configuration import Configuration
 from typing import Dict, List, Union
 
@@ -9,11 +10,13 @@ class Runtime(CLASS):
 
     __config: Configuration
     __context: Dict[str, Union[str, List[str]]]
+    __loader: AttributeLoader
 
     def __init__(self, conf: Configuration, context: Dict[str, Union[str, List[str]]]):
         super(Runtime, self).__init__()
         self.__config = conf
         self.__context = context
+        self.__loader = AttributeLoader(self.config)
         self.set_logger_name("runtime")
         self.log.debug("runtime startup")
 
@@ -30,7 +33,16 @@ class Runtime(CLASS):
             RuntimeError: if the command throws an exception or fails execution
 
         """
-        raise RuntimeError("not implemented")
+        try:
+            command = self.loader.load(cmd)  # type: Command
+            command()
+            command.safe_execute(self.context)
+        except ImportError as e:
+            raise RuntimeError(f"command failed due to error: {e}")
+        except TypeError as e:
+            raise RuntimeError(f"command failed due to error: {e}")
+        except AttributeError as e:
+            raise RuntimeError(f"command failed due to error: {e}")
 
     @property
     def config(self) -> Configuration:  # pylint: disable=C0111
@@ -51,6 +63,16 @@ class Runtime(CLASS):
         if not isinstance(ctx, dict):
             raise AttributeError("`context` must be of type dict")
         self.__context = ctx
+
+    @property
+    def loader(self) -> AttributeLoader:
+        return self.__loader
+
+    @loader.setter
+    def loader(self, l: AttributeLoader):
+        if not isinstance(l, AttributeLoader):
+            raise AttributeError("`loader` must be type tgt_grease.util.AttributeLoader")
+        self.__loader = l
 
     @staticmethod
     def parse_data_args(data: List[str], sep: str) -> Dict[str, Union[str, List[str]]]:

@@ -47,4 +47,7 @@ if args.config:
 
 ctx = Runtime.parse_data_args(args.context, ",")
 
-Runtime(nodeConfig, ctx).execute(args.command)
+try:
+    Runtime(nodeConfig, ctx).execute(args.command)
+except RuntimeError as e:
+    log.critical(f"failed to execute command due to error: {e}")
