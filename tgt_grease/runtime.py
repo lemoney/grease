@@ -81,6 +81,7 @@ class Runtime(CLASS):
             ["key1=val1", "key2=val2", "key3=val3"] -> {'key1': 'val1', 'key2': 'val2', 'key3': 'val3'}
             ["key1=val1", "key2=val2", "key3=val3,val4"] -> {'key1': 'val1', 'key2': 'val2', 'key3': ['val3', 'val4']}
             ["key1=val1", "key2=val2", "key3=val3, val4"] -> {'key1': 'val1', 'key2': 'val2', 'key3': ['val3', 'val4']}
+            ["key1=val1", "key2=val2", "key3=val3\\,val4"] -> {'key1': 'val1', 'key2': 'val2', 'key3': 'val3,val4'}
         Args:
             data (List[str]): List to parse
             sep (str): separator for the string to parse by
