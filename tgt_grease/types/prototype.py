@@ -1,10 +1,15 @@
-"""definition of the core types class"""
+"""definition of the core Prototype class"""
 from .base_class import CLASS
 from abc import abstractmethod, ABCMeta
 
 
 class Prototype(CLASS):
-    """abstract base for grease commands"""
+    """abstract base for grease commands
+
+    Note:
+        providing `loop` in context will execute the prototype that many times
+
+    """
 
     __metadata__ = ABCMeta
 
@@ -16,19 +21,19 @@ class Prototype(CLASS):
         """safely execute prototype to ensure thread doesn't crash
 
         Args:
-            context (dict): types context
+            context (dict): context for execution
 
         """
         try:
             self.execute(context)
         except BaseException as e:
-            self.log.critical(f"failed to execute types due to {type(e)}")
+            self.log.critical(f"failed to execute prototype {self.__class__.__name__} due to {type(e)}")
 
     def execute(self, context: dict):
-        """types prototype (user main method effectively)
+        """prototype main loop
 
         Args:
-            context (dict): types context object
+            context (dict): context object
 
         """
         if int(context.get("loop", "0")) == 0:
@@ -42,4 +47,4 @@ class Prototype(CLASS):
 
     @abstractmethod
     def run(self, context: dict):
-        """user defined prototype to execute"""
+        """user defined prototype to execute forever or for as many 'loop's as provided"""

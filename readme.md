@@ -28,7 +28,7 @@ based on configuration can act on these sources. These actions
 can be anything you can do in python.
 
 Out of the box GREASE is very minimal, it is but an engine. Similar
-to Django, you write your application, GREASE just serves it. 
+to Django, you write your application, GREASE _just serves it_. 
 
 ## Getting the Docs
 

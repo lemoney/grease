@@ -1,4 +1,4 @@
-"""definition of the core types class"""
+"""definition of the core Command class"""
 from .base_class import CLASS
 from tgt_grease import Configuration
 from abc import abstractmethod, ABCMeta
@@ -16,10 +16,10 @@ class Command(CLASS):
         self.set_logger_name("command")
 
     def safe_execute(self, context: dict):
-        """safely execute types to ensure thread doesn't crash
+        """safely execute the command to ensure thread doesn't crash
 
         Args:
-            context (dict): types context
+            context (dict): context object to execute with
 
         """
         try:
@@ -29,19 +29,26 @@ class Command(CLASS):
 
     @abstractmethod
     def execute(self, context: dict):
-        """types execution (user main method effectively)
+        """user code to execute upon trigger
 
         Args:
-            context (dict): types context object
+            context (dict): context for command
 
         """
 
     @property
-    def config(self) -> Configuration:  # pylint: disable=C0111
+    def config(self) -> Configuration:
+        """returns the commands active configuration
+
+        Returns:
+            tgt_grease.Configuration: active command configuration
+
+        :noindex:
+        """
         return self.__config
 
     @config.setter
-    def config(self, c: Configuration):  # pylint: disable=C0111
+    def config(self, c: Configuration):
         if not isinstance(c, Configuration):
             raise AttributeError("`config` must be of type tgt_grease.Configuration")
         self.__config = c

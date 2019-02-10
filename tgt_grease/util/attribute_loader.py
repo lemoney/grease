@@ -6,12 +6,7 @@ from typing import Type
 
 
 class AttributeLoader(CLASS):
-    """the AttributeLoader class enables dynamic loading of modules
-
-    Attributes:
-          config (Configuration): active configuration instance being used to configure the Attr Loader
-
-    """
+    """the AttributeLoader class enables dynamic loading of modules"""
 
     __config: Configuration
 
@@ -81,11 +76,17 @@ class AttributeLoader(CLASS):
         return cont_name in dir(module)
 
     @property
-    def config(self) -> Configuration:  # pylint: disable=C0111
+    def config(self) -> Configuration:
+        """returns the AttributeLoader's active configuration
+
+        Returns:
+            tgt_grease.Configuration: active AttributeLoader configuration
+
+        """
         return self.__config
 
     @config.setter
-    def config(self, c: Configuration):  # pylint: disable=C0111
+    def config(self, c: Configuration):
         if not isinstance(c, Configuration):
             raise AttributeError("`config` must be of type tgt_grease.Configuration")
         self.__config = c

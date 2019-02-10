@@ -44,21 +44,33 @@ class Runtime(CLASS):
             raise RuntimeError(f"command failed due to AttributeError: {e}")
 
     @property
-    def config(self) -> Configuration:  # pylint: disable=C0111
+    def config(self) -> Configuration:
+        """return runtime configuration instance
+
+        Returns:
+            tgt_grease.Configuration: active configuration instance
+
+        """
         return self.__config
 
     @config.setter
-    def config(self, c: Configuration):  # pylint: disable=C0111
+    def config(self, c: Configuration):
         if not isinstance(c, Configuration):
             raise AttributeError("`config` must be of type tgt_grease.Configuration")
         self.__config = c
 
     @property
-    def loader(self) -> AttributeLoader:  # pylint: disable=C0111
+    def loader(self) -> AttributeLoader:
+        """return runtime attribute loader instance
+
+        Returns:
+            tgt_grease.util.AttributeLoader: active AttributeLoader instance
+
+        """
         return self.__loader
 
     @loader.setter
-    def loader(self, l: AttributeLoader):  # pylint: disable=C0111
+    def loader(self, l: AttributeLoader):
         if not isinstance(l, AttributeLoader):
             raise AttributeError("`loader` must be type tgt_grease.util.AttributeLoader")
         self.__loader = l
@@ -66,18 +78,23 @@ class Runtime(CLASS):
     @staticmethod
     def parse_data_args(data: List[str], sep: str) -> Dict[str, Union[str, List[str]]]:
         """This is useful for transforming a list of key/values into a dictionary
+
         EX where sep is =::
+
             ["key1=val1", "key2=val2", "key3=val3"] -> {'key1': 'val1', 'key2': 'val2', 'key3': 'val3'}
             ["key1=val1", "key2=val2", "key3=val3,val4"] -> {'key1': 'val1', 'key2': 'val2', 'key3': ['val3', 'val4']}
             ["key1=val1", "key2=val2", "key3=val3, val4"] -> {'key1': 'val1', 'key2': 'val2', 'key3': ['val3', 'val4']}
             ["key1=val1", "key2=val2", "key3=val3\\,val4"] -> {'key1': 'val1', 'key2': 'val2', 'key3': 'val3,val4'}
+
         Args:
             data (List[str]): List to parse
             sep (str): separator for the string to parse by
+
         Returns:
             dict: key/value pairs from data list
-        Note:
-            Parse failures yield ValueErrors
+
+        Raises:
+            ValueError: when separator is not used correctly
         """
         final = {}
         for elem in data:

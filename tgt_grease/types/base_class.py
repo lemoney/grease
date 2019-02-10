@@ -18,11 +18,17 @@ class CLASS:
         self.log = logging.getLogger("grease")
 
     @property
-    def log(self) -> logging.Logger:  # pylint: disable=C0111
+    def log(self) -> logging.Logger:
+        """returns the commands active logger
+
+        Returns:
+            logging.Logger: active logger instance
+
+        """
         return self.__log
 
     @log.setter
-    def log(self, l: logging.Logger):  # pylint: disable=C0111
+    def log(self, l: logging.Logger):
         self.__log = l
 
     def set_logger_name(self, name: str):

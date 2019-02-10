@@ -3,13 +3,13 @@
 ## Maintainers
 
 ### James Bell
-###### Guest Reliability Engineering :: Target
+###### Release, Reliability, and Runtime Engineer :: Target
   * Chief Architect
   * Primary Maintainer
   * Project Leader
 
 ### Grant Gordon
-###### Guest Reliability Engineering :: Target
+###### Linux Systems Reliability Engineer :: Post Consumer Brands
   * Core Maintainer
   * Integrations Specialist
   * CI/CD Pipeline Engineer

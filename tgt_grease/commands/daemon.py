@@ -7,6 +7,9 @@ class Daemon(Command):
 
     This command attempts to connect to MongoDB, join/create the GREASE cluster, perform cluster operations
 
+    Args:
+        config (tgt_grease.Configuration): configuration object to be used
+
     """
 
     def __init__(self, config):
