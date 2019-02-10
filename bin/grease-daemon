@@ -8,26 +8,27 @@ import json
 from dataclasses import replace
 from tgt_grease import Runtime, Configuration
 
-log = logging.getLogger("grease.cli.bridge")
+log = logging.getLogger("grease.cli.daemon")
 parser = argparse.ArgumentParser()
 parser.add_argument('--log-config', help='load a logging configuration file', type=str)
 parser.add_argument('--config', help='load a configuration file for this node', type=str)
 parser.add_argument('--context', '-c', nargs='+', help='key=value pairs for context', default='')
 subparsers = parser.add_subparsers(
     title="sub-commands",
-    description="tasks able to be executed on the bridge",
+    description="tasks able to be executed from the daemon",
     dest="sub_command",
     help='sub-command help')
 
-# create the parser for the "join" command
-parser_join = subparsers.add_parser('join', help='join help')
-parser_join.add_argument('-n', '--node', type=str, help='node to join (defaults to self)', default="self")
-# create the parser for the "info" command
-parser_info = subparsers.add_parser('info', help='info help')
-parser_info.add_argument('-n', '--node', type=str, help='node to get info on (defaults to self)', default="self")
-# create the parser for the "kick" command
-parser_kick = subparsers.add_parser('kick', help='kick help')
-parser_kick.add_argument('-n', '--node', type=str, help='node to kick (defaults to self)', default="self")
+# create the parser for the "start" command
+parser_start = subparsers.add_parser('start', help='start the daemon')
+# create the parser for the "stop" command
+parser_stop = subparsers.add_parser('stop', help='stop the daemon')
+# create the parser for the "restart" command
+parser_restart = subparsers.add_parser('restart', help='restart the daemon')
+# create the parser for the "install" command
+parser_install = subparsers.add_parser('install', help='install the daemon (supports SystemD/MacOS/Windows)')
+# create the parser for the "run" command
+parser_run = subparsers.add_parser('run', help='run the daemon in the foreground')
 args = parser.parse_args()
 
 if not args.sub_command:
@@ -70,11 +71,8 @@ try:
 except ValueError as e:
     log.critical(f"failed to parse context due to: {e}")
     sys.exit(1)
-
 ctx["process"] = args.sub_command
-ctx["node"] = args.node
-
 try:
-    Runtime(nodeConfig).execute("bridge", ctx)
+    Runtime(nodeConfig).execute("daemon", ctx)
 except RuntimeError as e:
     log.critical(f"failed to execute command due to error: {e}")

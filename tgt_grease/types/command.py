@@ -1,5 +1,6 @@
 """definition of the core types class"""
 from .base_class import CLASS
+from tgt_grease import Configuration
 from abc import abstractmethod, ABCMeta
 
 
@@ -7,9 +8,11 @@ class Command(CLASS):
     """abstract base for grease commands"""
 
     __metadata__ = ABCMeta
+    __config: Configuration
 
-    def __init__(self):
+    def __init__(self, config: Configuration):
         super(Command, self).__init__()
+        self.__config = config
         self.set_logger_name("command")
 
     def safe_execute(self, context: dict):
@@ -32,3 +35,13 @@ class Command(CLASS):
             context (dict): types context object
 
         """
+
+    @property
+    def config(self) -> Configuration:  # pylint: disable=C0111
+        return self.__config
+
+    @config.setter
+    def config(self, c: Configuration):  # pylint: disable=C0111
+        if not isinstance(c, Configuration):
+            raise AttributeError("`config` must be of type tgt_grease.Configuration")
+        self.__config = c

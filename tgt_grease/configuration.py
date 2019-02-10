@@ -1,6 +1,5 @@
 """engine configuration class definition"""
 from dataclasses import dataclass, field
-from .types import CLASS
 from typing import List, DefaultDict
 from collections import defaultdict
 
@@ -14,7 +13,7 @@ def default_import_path() -> list:
 
 
 @dataclass
-class Configuration(CLASS):
+class Configuration(object):
     """configuration for a grease node"""
     roles: List[str] = field(default_factory=list)
     prototypes: List[str] = field(default_factory=list)

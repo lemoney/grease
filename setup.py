@@ -47,6 +47,7 @@ setup(
     scripts=[
         'bin/grease',
         'bin/grease-bridge',
+        'bin/grease-daemon',
         'bin/grease.ps1',
     ]
 )

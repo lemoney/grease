@@ -14,9 +14,12 @@ parser.add_argument('--log-config', help='load a logging configuration file', ty
 parser.add_argument('--config', help='load a configuration file for this node', type=str)
 parser.add_argument('--context', '-c', nargs='+', help='key=value pairs for context', default='')
 parser.add_argument('command', metavar='command', type=str, help='command to execute')
-parser.add_argument('sub_commands', metavar='sub-commands',
-                    type=str, nargs='+', help='sub-commands for the primary commands')
 args = parser.parse_args()
+
+# ensure any reserved commands (those that have their own CLI) aren't executed
+if args.command in ['daemon', 'bridge']:
+    log.error(f"cannot execute {args.command} use its' CLI: grease-{args.command}")
+    sys.exit(1)
 
 if args.log_config:
     try:
