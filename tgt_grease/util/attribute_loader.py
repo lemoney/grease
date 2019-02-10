@@ -2,6 +2,7 @@
 from tgt_grease.types import CLASS
 from tgt_grease import Configuration
 import importlib
+from typing import Type
 
 
 class AttributeLoader(CLASS):
@@ -19,7 +20,7 @@ class AttributeLoader(CLASS):
         self.__config = config
         self.set_logger_name("attrloader")
 
-    def load(self, name: str) -> object:
+    def load(self, name: str) -> Type:
         """load a specified exported "attribute of a class
 
         Args:

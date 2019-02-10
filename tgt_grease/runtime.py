@@ -1,5 +1,5 @@
 """GREASE Runtime Definition"""
-from .types import CLASS, Command
+from .types import CLASS
 from .util import AttributeLoader
 from .configuration import Configuration
 from typing import Dict, List, Union
@@ -34,7 +34,7 @@ class Runtime(CLASS):
 
         """
         try:
-            command = self.loader.load(cmd)  # type: Command
+            command = self.loader.load(cmd)  # type: tgt_grease.types.Command
             command()
             command.safe_execute(self.context)
         except ImportError as e:
@@ -65,11 +65,11 @@ class Runtime(CLASS):
         self.__context = ctx
 
     @property
-    def loader(self) -> AttributeLoader:
+    def loader(self) -> AttributeLoader:  # pylint: disable=C0111
         return self.__loader
 
     @loader.setter
-    def loader(self, l: AttributeLoader):
+    def loader(self, l: AttributeLoader):  # pylint: disable=C0111
         if not isinstance(l, AttributeLoader):
             raise AttributeError("`loader` must be type tgt_grease.util.AttributeLoader")
         self.__loader = l
@@ -95,8 +95,8 @@ class Runtime(CLASS):
             if len(kv) != 2:
                 raise ValueError(
                     f'could not split key value pair properly, please use = as separator::{elem} generated {kv}')
-            if ',' in kv[1] and '\,' not in kv[1]:
-                final[kv[0]] = kv[1].split(',')
+            if ',' in kv[1] and '\\,' not in kv[1]:
+                final[kv[0]] = [z.strip() for z in kv[1].split(',')]
             else:
-                final[kv[0]] = kv[1].replace('\,', ',')
+                final[kv[0]] = kv[1].replace('\\,', ',')
         return final
