@@ -8,7 +8,8 @@ from collections import defaultdict
 def default_import_path() -> list:
     """default module path for AttributeLoader"""
     return [
-        "tgt_grease",
+        "tgt_grease.commands",
+        "tgt_grease.prototypes",
     ]
 
 

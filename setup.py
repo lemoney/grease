@@ -46,6 +46,7 @@ setup(
     zip_safe=False,
     scripts=[
         'bin/grease',
-        'bin/grease.ps1'
+        'bin/grease-bridge',
+        'bin/grease.ps1',
     ]
 )

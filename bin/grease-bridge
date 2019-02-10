@@ -8,12 +8,11 @@ import json
 from dataclasses import replace
 from tgt_grease import Runtime, Configuration
 
-log = logging.getLogger("grease.cli")
+log = logging.getLogger("grease.cli.bridge")
 parser = argparse.ArgumentParser()
 parser.add_argument('--log-config', help='load a logging configuration file', type=str)
 parser.add_argument('--config', help='load a configuration file for this node', type=str)
 parser.add_argument('--context', '-c', nargs='+', help='key=value pairs for context', default='')
-parser.add_argument('command', metavar='command', type=str, help='command to execute')
 parser.add_argument('sub_commands', metavar='sub-commands',
                     type=str, nargs='+', help='sub-commands for the primary commands')
 args = parser.parse_args()
@@ -55,6 +54,6 @@ except ValueError as e:
     sys.exit(1)
 ctx["grease_cli_sub_commands"] = args.sub_commands
 try:
-    Runtime(nodeConfig).execute(args.command, ctx)
+    Runtime(nodeConfig).execute("bridge", ctx)
 except RuntimeError as e:
     log.critical(f"failed to execute command due to error: {e}")

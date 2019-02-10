@@ -9,8 +9,8 @@ class Command(CLASS):
     __metadata__ = ABCMeta
 
     def __init__(self):
-        super().__init__()
-        self.set_logger_name("types")
+        super(Command, self).__init__()
+        self.set_logger_name("command")
 
     def safe_execute(self, context: dict):
         """safely execute types to ensure thread doesn't crash
@@ -22,7 +22,7 @@ class Command(CLASS):
         try:
             self.execute(context)
         except BaseException as e:
-            self.log.critical(f"failed to execute types due to {type(e)}")
+            self.log.critical(f"failed to execute command due to {type(e).__name__}")
 
     @abstractmethod
     def execute(self, context: dict):

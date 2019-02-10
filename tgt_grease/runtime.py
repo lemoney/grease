@@ -1,5 +1,5 @@
 """GREASE Runtime Definition"""
-from .types import CLASS
+from .types import CLASS, Command
 from .util import AttributeLoader
 from .configuration import Configuration
 from typing import Dict, List, Union
@@ -9,22 +9,21 @@ class Runtime(CLASS):
     """responsible for running the E in GREASE (the engine)"""
 
     __config: Configuration
-    __context: Dict[str, Union[str, List[str]]]
     __loader: AttributeLoader
 
-    def __init__(self, conf: Configuration, context: Dict[str, Union[str, List[str]]]):
+    def __init__(self, conf: Configuration):
         super(Runtime, self).__init__()
         self.__config = conf
-        self.__context = context
         self.__loader = AttributeLoader(self.config)
         self.set_logger_name("runtime")
         self.log.debug("runtime startup")
 
-    def execute(self, cmd: str):
+    def execute(self, cmd: str, context: Dict[str, Union[str, List[str]]]):
         """execute the command from the CLI
 
         Args:
             cmd (str): command to execute
+            context (Dict[str, Union[str, List[str]]]): context for the command
 
         Returns:
             None: should execute cleanly
@@ -34,15 +33,15 @@ class Runtime(CLASS):
 
         """
         try:
-            command = self.loader.load(cmd)  # type: tgt_grease.types.Command
-            command()
-            command.safe_execute(self.context)
+            c = self.loader.load(cmd)  # type: Command
+            command = c()
+            command.safe_execute(context)
         except ImportError as e:
-            raise RuntimeError(f"command failed due to error: {e}")
+            raise RuntimeError(f"command failed due to ImportError: {e}")
         except TypeError as e:
-            raise RuntimeError(f"command failed due to error: {e}")
+            raise RuntimeError(f"command failed due to TypeError: {e}")
         except AttributeError as e:
-            raise RuntimeError(f"command failed due to error: {e}")
+            raise RuntimeError(f"command failed due to AttributeError: {e}")
 
     @property
     def config(self) -> Configuration:  # pylint: disable=C0111
@@ -53,16 +52,6 @@ class Runtime(CLASS):
         if not isinstance(c, Configuration):
             raise AttributeError("`config` must be of type tgt_grease.Configuration")
         self.__config = c
-
-    @property
-    def context(self) -> Dict[str, any]:  # pylint: disable=C0111
-        return self.__context
-
-    @context.setter
-    def context(self, ctx: Dict[str, any]):  # pylint: disable=C0111
-        if not isinstance(ctx, dict):
-            raise AttributeError("`context` must be of type dict")
-        self.__context = ctx
 
     @property
     def loader(self) -> AttributeLoader:  # pylint: disable=C0111
@@ -77,7 +66,7 @@ class Runtime(CLASS):
     @staticmethod
     def parse_data_args(data: List[str], sep: str) -> Dict[str, Union[str, List[str]]]:
         """This is useful for transforming a list of key/values into a dictionary
-        EX::
+        EX where sep is =::
             ["key1=val1", "key2=val2", "key3=val3"] -> {'key1': 'val1', 'key2': 'val2', 'key3': 'val3'}
             ["key1=val1", "key2=val2", "key3=val3,val4"] -> {'key1': 'val1', 'key2': 'val2', 'key3': ['val3', 'val4']}
             ["key1=val1", "key2=val2", "key3=val3, val4"] -> {'key1': 'val1', 'key2': 'val2', 'key3': ['val3', 'val4']}
@@ -95,7 +84,7 @@ class Runtime(CLASS):
             kv = elem.split(sep)
             if len(kv) != 2:
                 raise ValueError(
-                    f'could not split key value pair properly, please use = as separator::{elem} generated {kv}')
+                    f'could not split key value pair properly, please use `{sep}` as separator::{elem} generated {kv}')
             if ',' in kv[1] and '\\,' not in kv[1]:
                 final[kv[0]] = [z.strip() for z in kv[1].split(',')]
             else:
