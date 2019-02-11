@@ -21,19 +21,6 @@ if args.command in ['daemon', 'bridge']:
     log.error(f"cannot execute {args.command} use its' CLI: grease-{args.command}")
     sys.exit(1)
 
-if args.log_config:
-    try:
-        if os.stat(args.log_config):
-            config.fileConfig(args.log_config)
-        else:
-            log.critical(f'invalid logging configuration [{args.log_config}]')
-            parser.print_help()
-            sys.exit(1)
-    except FileNotFoundError:
-        log.critical(f'logging configuration [{args.log_config}] not found')
-        parser.print_help()
-        sys.exit(1)
-
 nodeConfig = Configuration()
 if args.config:
     try:
@@ -50,6 +37,20 @@ if args.config:
         parser.print_help()
         sys.exit(1)
 
+runtime = Runtime(nodeConfig)
+if args.log_config:
+    try:
+        if os.stat(args.log_config):
+            config.fileConfig(args.log_config)
+        else:
+            log.critical(f'invalid logging configuration [{args.log_config}]')
+            parser.print_help()
+            sys.exit(1)
+    except FileNotFoundError:
+        log.critical(f'logging configuration [{args.log_config}] not found')
+        parser.print_help()
+        sys.exit(1)
+
 ctx = {}
 try:
     ctx = Runtime.parse_data_args(args.context, "=")
@@ -58,6 +59,6 @@ except ValueError as e:
     sys.exit(1)
 ctx["grease_cli_sub_commands"] = args.sub_commands
 try:
-    Runtime(nodeConfig).execute(args.command, ctx)
+    runtime.execute(args.command, ctx)
 except RuntimeError as e:
     log.critical(f"failed to execute command due to error: {e}")
