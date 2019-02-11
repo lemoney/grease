@@ -17,5 +17,17 @@ class Daemon(Command):
         self.set_logger_name("daemon")
 
     def execute(self, context: dict):
-        self.log.critical(self.config.grease_dir)
         self.log.critical(context)
+        process = context.get('process')
+        if process == 'start':
+            raise NotImplementedError(f"process {process} is not implemented")
+        elif process == 'stop':
+            raise NotImplementedError(f"process {process} is not implemented")
+        elif process == 'restart':
+            raise NotImplementedError(f"process {process} is not implemented")
+        elif process == 'install':
+            raise NotImplementedError(f"process {process} is not implemented")
+        elif process == 'run':
+            raise NotImplementedError(f"process {process} is not implemented")
+        else:
+            raise NotImplementedError(f"process {process} is not implemented")
