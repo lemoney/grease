@@ -57,7 +57,7 @@ try:
 except ValueError as e:
     log.critical(f"failed to parse context due to: {e}")
     sys.exit(1)
-ctx["grease_cli_sub_commands"] = args.sub_commands
+
 try:
     runtime.execute(args.command, ctx)
 except RuntimeError as e:
