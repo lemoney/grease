@@ -14,6 +14,7 @@ class Bridge(Command):
         super(Bridge, self).__init__(config)
         self.set_logger_name("bridge")
 
-    def execute(self, context: dict):
+    def execute(self, context: dict) -> bool:
         """Cluster Management Command"""
         self.log.error(f"context: {context}")
+        return True

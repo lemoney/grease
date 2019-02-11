@@ -28,11 +28,14 @@ class Command(CLASS):
             self.log.critical(f"failed to execute command due to {type(e).__name__}")
 
     @abstractmethod
-    def execute(self, context: dict):
+    def execute(self, context: dict) -> bool:
         """user code to execute upon trigger
 
         Args:
             context (dict): context for command
+
+        Returns:
+            bool: if the command succeeded then True else False
 
         """
 
