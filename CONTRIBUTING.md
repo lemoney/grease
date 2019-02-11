@@ -10,22 +10,15 @@ checklist for Non-Target contributors though:
 
 ## How to Contribute to GREASE
 Okay now that's out of the way, lets go over some stuff we
-like to see in pull requests. We use [git-flow](https://danielkummer.github.io/git-flow-cheatsheet/)
-to keep stuff cleaned up. Additionally we ask you please fork
-the project into your own namespace to keep the GREASE namespace
-as clean as possible. Here is the basic workflow:
-  1. Have awesome idea (easy for you though)
-  2. Fork GREASE
-  3. Start a new branch for your feature
-    * branch prefixes we use:
-      * `feature/`: for features
-      * `support/`: for general refactoring
-      * `hotfix/`: something broke and we need to fix it now
-  4. Submit your Pull Request! Do it early and mark it `WIP` so
+like to see in pull requests. We ask you please fork
+the project into your own namespace. Here is the basic workflow:
+  1. Have awesome idea (easy enough for you though :) ) 
+  1. Fork GREASE
+  1. Submit your Pull Request! Do it early and mark it `WIP` so
   the maintainer staff can help review it!
-  5. Tell the PR thread you are ready for review
-  6. If any changes need to be made we will let you know
-  7. Profit! You've merged into GREASE
+  1. Tell the PR thread you are ready for review
+  1. If any changes need to be made we will let you know
+  1. Profit! You've merged into GREASE
   
 ## Community Guidelines
   1. Be a Decent Human
