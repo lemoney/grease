@@ -10,6 +10,10 @@ from tgt_grease import Runtime, Configuration
 
 log = logging.getLogger("grease.cli.daemon")
 parser = argparse.ArgumentParser()
+# general flags
+parser.add_argument('--context', '-c', nargs='+', help='key=value pairs for context')
+parser.add_argument('--log-config', help='load a logging configuration file', type=str)
+parser.add_argument('--config', help='load a configuration file for this node', type=str)
 subparsers = parser.add_subparsers(
     title="sub-commands",
     description="tasks able to be executed from the daemon",
@@ -18,29 +22,14 @@ subparsers = parser.add_subparsers(
 
 # create the parser for the "start" command
 parser_start = subparsers.add_parser('start', help='start the daemon')
-parser_start.add_argument('--context', '-c', nargs='+', help='key=value pairs for context')
-parser_start.add_argument('--log-config', help='load a logging configuration file', type=str)
-parser_start.add_argument('--config', help='load a configuration file for this node', type=str)
 # create the parser for the "stop" command
 parser_stop = subparsers.add_parser('stop', help='stop the daemon')
-parser_stop.add_argument('--context', '-c', nargs='+', help='key=value pairs for context')
-parser_stop.add_argument('--log-config', help='load a logging configuration file', type=str)
-parser_stop.add_argument('--config', help='load a configuration file for this node', type=str)
 # create the parser for the "restart" command
 parser_restart = subparsers.add_parser('restart', help='restart the daemon')
-parser_restart.add_argument('--context', '-c', nargs='+', help='key=value pairs for context')
-parser_restart.add_argument('--log-config', help='load a logging configuration file', type=str)
-parser_restart.add_argument('--config', help='load a configuration file for this node', type=str)
 # create the parser for the "install" command
 parser_install = subparsers.add_parser('install', help='install the daemon (supports SystemD/MacOS/Windows)')
-parser_install.add_argument('--context', '-c', nargs='+', help='key=value pairs for context')
-parser_install.add_argument('--log-config', help='load a logging configuration file', type=str)
-parser_install.add_argument('--config', help='load a configuration file for this node', type=str)
 # create the parser for the "run" command
 parser_run = subparsers.add_parser('run', help='run the daemon in the foreground')
-parser_run.add_argument('--context', '-c', nargs='+', help='key=value pairs for context')
-parser_run.add_argument('--log-config', help='load a logging configuration file', type=str)
-parser_run.add_argument('--config', help='load a configuration file for this node', type=str)
 args = parser.parse_args()
 
 if not args.sub_command:

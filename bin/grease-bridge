@@ -10,6 +10,11 @@ from tgt_grease import Runtime, Configuration
 
 log = logging.getLogger("grease.cli.bridge")
 parser = argparse.ArgumentParser()
+# Meta options
+parser.add_argument('-n', '--node', type=str, help='node to join (defaults to self)', default="self")
+parser.add_argument('--log-config', help='load a logging configuration file', type=str)
+parser.add_argument('--config', help='load a configuration file for this node', type=str)
+parser.add_argument('--context', '-c', nargs='+', help='key=value pairs for context', default='')
 subparsers = parser.add_subparsers(
     title="sub-commands",
     description="tasks able to be executed on the bridge",
@@ -17,23 +22,11 @@ subparsers = parser.add_subparsers(
     help='sub-command help')
 
 # create the parser for the "join" command
-parser_join = subparsers.add_parser('join', help='join help')
-parser_join.add_argument('-n', '--node', type=str, help='node to join (defaults to self)', default="self")
-parser_join.add_argument('--log-config', help='load a logging configuration file', type=str)
-parser_join.add_argument('--config', help='load a configuration file for this node', type=str)
-parser_join.add_argument('--context', '-c', nargs='+', help='key=value pairs for context', default='')
+parser_join = subparsers.add_parser('join', help='join a node to the current cluster')
 # create the parser for the "info" command
-parser_info = subparsers.add_parser('info', help='info help')
-parser_info.add_argument('-n', '--node', type=str, help='node to get info on (defaults to self)', default="self")
-parser_info.add_argument('--log-config', help='load a logging configuration file', type=str)
-parser_info.add_argument('--config', help='load a configuration file for this node', type=str)
-parser_info.add_argument('--context', '-c', nargs='+', help='key=value pairs for context', default='')
+parser_info = subparsers.add_parser('info', help='get information on a node from the current cluster')
 # create the parser for the "kick" command
-parser_kick = subparsers.add_parser('kick', help='kick help')
-parser_kick.add_argument('-n', '--node', type=str, help='node to kick (defaults to self)', default="self")
-parser_kick.add_argument('--log-config', help='load a logging configuration file', type=str)
-parser_kick.add_argument('--config', help='load a configuration file for this node', type=str)
-parser_kick.add_argument('--context', '-c', nargs='+', help='key=value pairs for context', default='')
+parser_kick = subparsers.add_parser('kick', help='kick a node from the current cluster')
 args = parser.parse_args()
 
 if not args.sub_command:

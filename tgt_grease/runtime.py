@@ -33,8 +33,8 @@ class Runtime(CLASS):
 
         """
         try:
-            c = self.loader.load(cmd)  # type: Command
-            command = c(self.config)
+            c = self.loader.load(cmd)
+            command = c(self.config)  # type: Command
             command.safe_execute(context)
         except ImportError as e:
             raise RuntimeError(f"command failed due to ImportError: {e}")
