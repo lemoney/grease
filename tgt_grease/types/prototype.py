@@ -1,9 +1,10 @@
 """definition of the core Prototype class"""
-from .base_class import CLASS
+from .command import Command
 from abc import abstractmethod, ABCMeta
+from tgt_grease.configuration import Configuration
 
 
-class Prototype(CLASS):
+class Prototype(Command):
     """abstract base for grease commands
 
     Note:
@@ -13,21 +14,9 @@ class Prototype(CLASS):
 
     __metadata__ = ABCMeta
 
-    def __init__(self):
-        super().__init__()
-        self.set_logger_name("prototype")
-
-    def safe_execute(self, context: dict):
-        """safely execute prototype to ensure thread doesn't crash
-
-        Args:
-            context (dict): context for execution
-
-        """
-        try:
-            self.execute(context)
-        except BaseException as e:
-            self.log.critical(f"failed to execute prototype {self.__class__.__name__} due to {type(e)}")
+    def __init__(self, config: Configuration):
+        super().__init__(config)
+        self.set_logger_name(f"prototype.{self.__class__.__name__}")
 
     def execute(self, context: dict):
         """prototype main loop
@@ -44,6 +33,7 @@ class Prototype(CLASS):
             m = int(context.get("loop"))
             while i <= m:
                 self.run(context)
+                i += 1
 
     @abstractmethod
     def run(self, context: dict):
