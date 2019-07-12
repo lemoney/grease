@@ -1,5 +1,6 @@
 """main package"""
 from .configuration import Configuration, DEFAULT_GREASE_DIR
+from .grease import Grease
 from .runtime import Runtime
 from . import types
 from . import util

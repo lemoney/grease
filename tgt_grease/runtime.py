@@ -1,109 +1,70 @@
-"""GREASE Runtime Definition"""
-from .types import CLASS, Command  # pylint: disable=W0611
-from .util import AttributeLoader
-from .configuration import Configuration
-from typing import Dict, List, Union
+"""Defines the runtime object"""
+from tgt_grease.types import CLASS
+from .configuration import Configuration, DEFAULT_GREASE_DIR
+from pymongo import MongoClient
+import os
+import json
+
+MONGO_CONNECTION: MongoClient
 
 
 class Runtime(CLASS):
-    """responsible for running the E in GREASE (the engine)"""
+    """The Runtime class acts as a sort of container maintaining more complex state
 
-    __config: Configuration
-    __loader: AttributeLoader
+    Complex state management consists of things like the MongoDB connection and interacting with config
 
-    def __init__(self, conf: Configuration):
-        super(Runtime, self).__init__()
-        self.__config = conf
-        self.__loader = AttributeLoader(self.config)
-        self.set_logger_name("runtime")
-        self.log.debug("runtime startup")
+    """
 
-    def execute(self, cmd: str, context: Dict[str, Union[str, List[str]]]):
-        """execute the command from the CLI
+    __config: Configuration = None
 
-        Args:
-            cmd (str): command to execute
-            context (Dict[str, Union[str, List[str]]]): context for the command
-
-        Returns:
-            None: should execute cleanly
-
-        Raises:
-            RuntimeError: if the command throws an exception or fails execution
-
-        """
-        try:
-            c = self.loader.load(cmd)
-            command = c(self.config)  # type: Command
-            command.safe_execute(context)
-        except ImportError as e:
-            raise RuntimeError(f"command failed due to ImportError: {e}")
-        except TypeError as e:
-            raise RuntimeError(f"command failed due to TypeError: {e}")
-        except AttributeError as e:
-            raise RuntimeError(f"command failed due to AttributeError: {e}")
+    def __init__(self):
+        super(CLASS).__init__()
+        self.set_logger_name(self.__class__.__name__)
 
     @property
-    def config(self) -> Configuration:
-        """return runtime configuration instance
+    def mongo_client(self) -> MongoClient:
+        global MONGO_CONNECTION
+        if MONGO_CONNECTION is None:
+            self.log.info("initializing MongoDB Connection")
+            MONGO_CONNECTION = MongoClient(self.configuration.mongo_uri)
+        return MONGO_CONNECTION
 
-        Returns:
-            tgt_grease.Configuration: active configuration instance
+    @mongo_client.setter
+    def mongo_client(self, client: MongoClient):
+        global MONGO_CONNECTION
+        if isinstance(client, MongoClient):
+            MONGO_CONNECTION = client
+        else:
+            raise TypeError(f"type {type(client)} not allowed for Runtime.mongo_client expected for {type(MongoClient)}")
 
-        """
+    @property
+    def configuration(self) -> Configuration:
+        if self.__config is None:
+            self.log.debug("loading configuration")
+            self.__config = Configuration()
+            c: dict = dict()
+            if os.getenv("GREASE_CONFIGURATION"):
+                self.log.debug("loading configuration via `GREASE_CONFIGURATION` environment variable")
+                with open(os.getenv("GREASE_CONFIGURATION"), "r") as fil:
+                    c.update(json.load(fil))
+            else:
+                self.log.debug(f"loading configuration via default grease directory: {DEFAULT_GREASE_DIR}")
+                with open(DEFAULT_GREASE_DIR, "r") as fil:
+                    c.update(json.load(fil))
+            self.__config.roles = c.get("roles")
+            self.__config.prototypes = c.get("prototypes")
+            self.__config.mongo_uri = c.get("mongo_uri")
+            self.__config.grease_dir = c.get("grease_dir")
+            self.__config.import_path = c.get("import_path")
+            self.__config.resource_max_cpu = c.get("resource_max_cpu")
+            self.__config.resource_max_mem = c.get("resource_max_mem")
+            self.__config.sourcing_deduplication_threads = c.get("sourcing_deduplication_threads")
+            self.__config.additional = c.get("additional")
         return self.__config
 
-    @config.setter
-    def config(self, c: Configuration):
-        if not isinstance(c, Configuration):
-            raise AttributeError("`config` must be of type tgt_grease.Configuration")
-        self.__config = c
-
-    @property
-    def loader(self) -> AttributeLoader:
-        """return runtime attribute loader instance
-
-        Returns:
-            tgt_grease.util.AttributeLoader: active AttributeLoader instance
-
-        """
-        return self.__loader
-
-    @loader.setter
-    def loader(self, l: AttributeLoader):
-        if not isinstance(l, AttributeLoader):
-            raise AttributeError("`loader` must be type tgt_grease.util.AttributeLoader")
-        self.__loader = l
-
-    @staticmethod
-    def parse_data_args(data: List[str], sep: str) -> Dict[str, Union[str, List[str]]]:
-        """This is useful for transforming a list of key/values into a dictionary
-
-        EX where sep is =::
-
-            ["key1=val1", "key2=val2", "key3=val3"] -> {'key1': 'val1', 'key2': 'val2', 'key3': 'val3'}
-            ["key1=val1", "key2=val2", "key3=val3,val4"] -> {'key1': 'val1', 'key2': 'val2', 'key3': ['val3', 'val4']}
-            ["key1=val1", "key2=val2", "key3=val3, val4"] -> {'key1': 'val1', 'key2': 'val2', 'key3': ['val3', 'val4']}
-            ["key1=val1", "key2=val2", "key3=val3\\,val4"] -> {'key1': 'val1', 'key2': 'val2', 'key3': 'val3,val4'}
-
-        Args:
-            data (List[str]): List to parse
-            sep (str): separator for the string to parse by
-
-        Returns:
-            dict: key/value pairs from data list
-
-        Raises:
-            ValueError: when separator is not used correctly
-        """
-        final = {}
-        for elem in data:
-            kv = elem.split(sep)
-            if len(kv) != 2:
-                raise ValueError(
-                    f'could not split key value pair properly, please use `{sep}` as separator::{elem} generated {kv}')
-            if ',' in kv[1] and '\\,' not in kv[1]:
-                final[kv[0]] = [z.strip() for z in kv[1].split(',')]
-            else:
-                final[kv[0]] = kv[1].replace('\\,', ',')
-        return final
+    @configuration.setter
+    def configuration(self, config: Configuration):
+        if isinstance(config, Configuration):
+            self.__config = config
+        else:
+            raise TypeError(f"type {type(config)} not allowed for Runtime.configuration expected {type(Configuration)}")

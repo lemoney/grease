@@ -6,7 +6,7 @@ import os
 import sys
 import json
 from dataclasses import replace
-from tgt_grease import Runtime, Configuration
+from tgt_grease import Grease, Configuration
 
 log = logging.getLogger("grease.cli.bridge")
 parser = argparse.ArgumentParser()
@@ -50,7 +50,7 @@ if args.config:
         parser.print_help()
         sys.exit(1)
 
-runtime = Runtime(nodeConfig)
+grease = Grease(nodeConfig)
 if args.log_config:
     try:
         if os.stat(args.log_config):
@@ -66,7 +66,7 @@ if args.log_config:
 
 ctx = {}
 try:
-    ctx = Runtime.parse_data_args(args.context, "=")
+    ctx = Grease.parse_data_args(args.context, "=")
 except ValueError as e:
     log.critical(f"failed to parse context due to: {e}")
     sys.exit(1)
@@ -75,6 +75,6 @@ ctx["process"] = args.sub_command
 ctx["node"] = args.node
 
 try:
-    runtime.execute("bridge", ctx)
+    grease.execute("bridge", ctx)
 except RuntimeError as e:
     log.critical(f"failed to execute command due to error: {e}")

@@ -1,7 +1,6 @@
 """engine configuration class definition"""
 from dataclasses import dataclass, field
 from typing import List, Dict
-from collections import defaultdict
 
 
 def default_import_path() -> list:
@@ -26,4 +25,4 @@ class Configuration(object):
     resource_max_cpu: int = field(default=95)
     resource_max_mem: int = field(default=95)
     sourcing_deduplication_threads: int = field(default=150)
-    additional: Dict[str, any] = field(default_factory=defaultdict)
+    additional: Dict[str, any] = field(default_factory=dict)

@@ -39,6 +39,8 @@ setup(
     setup_requires=['pytest-runner'],
     tests_require=['pytest', 'pylint'],
     install_requires=[
+        'pymongo==3.8.0',
+        'pinject==0.14.1'
     ] + (
          ["pywin32==224"] if "nt" == os.name else []
         ),
