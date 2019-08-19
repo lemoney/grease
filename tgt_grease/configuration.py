@@ -20,6 +20,7 @@ class Configuration(object):
     roles: List[str] = field(default_factory=list)
     prototypes: List[str] = field(default_factory=list)
     mongo_uri: str = field(default="mongodb://localhost:27017", repr=False)
+    mongo_database: str = field(default="grease")
     grease_dir: str = field(default=DEFAULT_GREASE_DIR)
     import_path: List[str] = field(default_factory=default_import_path)
     resource_max_cpu: int = field(default=95)

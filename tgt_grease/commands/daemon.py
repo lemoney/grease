@@ -1,6 +1,8 @@
 """GREASE Daemon Runtime definition"""
 from tgt_grease.types import Command
+from tgt_grease import Runtime
 from tgt_grease.util import start_daemon, stop_daemon, restart_daemon, install_daemon
+import pinject
 
 
 class Daemon(Command):
@@ -13,9 +15,12 @@ class Daemon(Command):
 
     """
 
+    __runtime: Runtime
+
     def __init__(self, config):
         super(Daemon, self).__init__(config)
         self.set_logger_name("daemon")
+        self.__runtime = pinject.new_object_graph().provide(Runtime)
 
     def execute(self, context: dict) -> bool:
         process = context.get('process')
@@ -47,5 +52,16 @@ class Daemon(Command):
             raise NotImplementedError(f"process {process} is not implemented")
 
     def run(self):
-        """run the daemon in the foreground"""
+        """run the daemon process for a single iteration"""
         raise NotImplementedError("process run is not implemented")
+
+    @property
+    def runtime(self) -> Runtime:
+        return self.__runtime
+
+    @runtime.setter
+    def runtime(self, r: Runtime):
+        if isinstance(r, Runtime):
+            self.__runtime = r
+        else:
+            raise TypeError(f"type {type(r)} not allowed for Daemon.runtime expected {type(Runtime)}")

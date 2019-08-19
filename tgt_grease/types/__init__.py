@@ -2,4 +2,5 @@
 from .base_class import CLASS
 from .command import Command
 from .prototype import Prototype
-from .jobConfig import JobConfig
+from .job_config import JobConfig
+from .scan_data import ScanData
